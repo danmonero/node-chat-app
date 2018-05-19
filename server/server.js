@@ -10,7 +10,13 @@ var server = http.createServer(app);
 var io = socketIO(server);
 
 io.on("connection", (socket) => {
-    console.log("New user connected");
+    socket.emit("newMessage", {
+        message: "Welcome to the app!"
+    });
+
+    socket.broadcast.emit("newMessage", {
+        message: "New user joined the app!"
+    });
 
     socket.on("disconnect", () => {
         console.log("User disconnected.");
@@ -20,11 +26,11 @@ io.on("connection", (socket) => {
         console.log(message);
     });
 
-    socket.emit("newMessage", {
-        from: "test@example.com",
-        body: "Hi There",
-        createdAt: new Date().getTime()
-    });
+    // socket.emit("newMessage", {
+    //     from: "test@example.com",
+    //     body: "Hi There",
+    //     createdAt: new Date().getTime()
+    // });
 })
 
 app.use(express.static(path.join(__dirname, "../public")));
